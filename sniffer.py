@@ -1,10 +1,7 @@
 from scapy.all import *
 from datetime import datetime
-import threading
 
-running = False
-sniff_thread = None
-
+sniffer = None
 LOG_FILE = "sniffer_log.txt"
 
 
@@ -15,19 +12,18 @@ def get_protocol_name(packet):
         return "UDP"
     elif packet.haslayer(ICMP):
         return "ICMP"
-    else:
-        return "OTHER"
+    return "OTHER"
 
 
 def packet_callback(packet):
-    if not running:
-        return
-
     if packet.haslayer(IP):
-        ip_src = packet[IP].src
-        ip_dst = packet[IP].dst
-        proto = get_protocol_name(packet)
-        time_now = datetime.now().strftime("%H:%M:%S")
+
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        src_ip = packet[IP].src
+        dst_ip = packet[IP].dst
+
+        protocol = get_protocol_name(packet)
         size = len(packet)
 
         src_port = "-"
@@ -36,66 +32,102 @@ def packet_callback(packet):
         if packet.haslayer(TCP):
             src_port = packet[TCP].sport
             dst_port = packet[TCP].dport
+
         elif packet.haslayer(UDP):
             src_port = packet[UDP].sport
             dst_port = packet[UDP].dport
 
-        line = f"[{time_now}] {ip_src}:{src_port} -> {ip_dst}:{dst_port} | {proto} | Size: {size} bytes"
+        line = (
+            f"[{timestamp}] "
+            f"{src_ip}:{src_port} -> "
+            f"{dst_ip}:{dst_port} | "
+            f"{protocol} | "
+            f"Size: {size} bytes"
+        )
 
         print(line)
 
-        with open(LOG_FILE, "a") as f:
-            f.write(line + "\n")
+        with open(LOG_FILE, "a") as log:
+            log.write(line + "\n")
 
 
-def start_sniff():
-    global running
-    running = True
+def start_sniffer():
+    global sniffer
 
-    print("\n[+] Sniffer STARTED...\n")
+    if sniffer is not None:
+        print("[!] Sniffer is already running.")
+        return
 
-    sniff(
+    print("\n[+] Sniffer Started\n")
+
+    sniffer = AsyncSniffer(
         prn=packet_callback,
-        store=False,
-        stop_filter=lambda x: not running
+        store=False
     )
 
+    sniffer.start()
 
-def stop_sniff():
-    global running
-    running = False
-    print("\n[-] Sniffer STOPPED...\n")
+
+def stop_sniffer():
+    global sniffer
+
+    if sniffer is None:
+        print("[!] Sniffer is not running.")
+        return
+
+    sniffer.stop()
+    sniffer = None
+
+    print("\n[-] Sniffer Stopped\n")
+
+
+def show_log_file():
+    try:
+        with open(LOG_FILE, "r") as log:
+            lines = log.readlines()
+
+            if not lines:
+                print("Log file is empty.")
+                return
+
+            print("\n===== LAST 10 ENTRIES =====\n")
+
+            for line in lines[-10:]:
+                print(line.strip())
+
+    except FileNotFoundError:
+        print("No log file found yet.")
 
 
 def menu():
-    global sniff_thread
-
     while True:
-        print("\n===== ADVANCED SNIFFER MENU =====")
+
+        print("\n===== ADVANCED NETWORK SNIFFER =====")
         print("1. Start Sniffer")
         print("2. Stop Sniffer")
-        print("3. Exit")
+        print("3. View Last 10 Logs")
+        print("4. Exit")
 
-        choice = input("Choose: ")
+        choice = input("\nChoose: ")
 
         if choice == "1":
-            if sniff_thread is None or not sniff_thread.is_alive():
-                sniff_thread = threading.Thread(target=start_sniff, daemon=True)
-                sniff_thread.start()
-            else:
-                print("[!] Sniffer already running")
+            start_sniffer()
 
         elif choice == "2":
-            stop_sniff()
+            stop_sniffer()
 
         elif choice == "3":
-            stop_sniff()
-            print("Exiting...")
+            show_log_file()
+
+        elif choice == "4":
+            stop_sniffer()
+            print("Goodbye!")
             break
 
         else:
-            print("Invalid choice")
+            print("Invalid choice.")
 
 
-print("=== ADVANCED MINI WIRESHARK ===")
-menu()
+if __name__ == "__main__":
+    print("=== PROFESSIONAL MINI WIRESHARK ===")
+    menu()

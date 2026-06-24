@@ -1,73 +1,71 @@
-# Network Sniffer
+# Advanced Network Sniffer
 
-## Overview
+## 🔐 Cyber Security Internship Project
 
-Advanced Network Sniffer is a Python-based network monitoring tool developed using the Scapy library. It captures network packets in real time and displays useful information such as source IP, destination IP, protocol type, ports, packet size, and timestamp.
-
-This project was created as part of a Cyber Security Internship task to demonstrate packet sniffing and network traffic analysis fundamentals.
+A professional Python-based network packet sniffer using Scapy that captures and analyzes real-time network traffic.
 
 ---
 
-## Features
+## 🚀 Features
 
-- Real-time packet capture
-- Source and destination IP detection
-- Protocol identification (TCP, UDP, ICMP)
-- Source and destination port detection
+- Real-time packet capturing
+- Source & Destination IP tracking
+- Protocol detection (TCP / UDP / ICMP)
+- Port analysis (Source & Destination)
 - Packet size monitoring
 - Timestamp logging
-- Start and Stop controls
-- Log file generation
-- View recent captured packets
+- Start / Stop control system
+- Automatic log saving
 
 ---
 
-## Technologies Used
+## 🛠️ Technologies Used
 
 - Python 3
 - Scapy
 - Kali Linux
-- VirtualBox
+- VirtualBox (for testing environment)
 
 ---
 
-## Installation
+## 📦 Installation
 
-Install Scapy:
+Install dependencies:
 
 ```bash
 sudo apt update
 sudo apt install python3-scapy -y
 ```
 
-## Usage
+---
 
-Run the program:
+## ▶️ Usage
+
+Run the tool:
 
 ```bash
 sudo python3 sniffer.py
 ```
 
-### Menu Options
+### Menu Options:
 
-1. Start Sniffer
-2. Stop Sniffer
-3. View Last 10 Logs
-4. Exit
+1. Start Sniffer  
+2. Stop Sniffer  
+3. Exit  
 
 ---
 
-## Example Output
+## 📊 Example Output
 
 ```text
-[2026-06-24 15:22:10] 192.168.1.10:52431 -> 142.250.184.78:443 | TCP | Size: 74 bytes
+[2026-06-24 15:22:10] 192.168.1.10:52344 -> 142.250.184.78:443 | TCP | Size: 74 bytes
 ```
 
 ---
 
-## Log File
+## 📁 Log File
 
-Captured packets are automatically saved in:
+All captured packets are saved in:
 
 ```text
 sniffer_log.txt
@@ -75,23 +73,22 @@ sniffer_log.txt
 
 ---
 
-## Learning Outcomes
+## 🎯 Learning Outcomes
 
-- Understanding packet sniffing concepts
-- Working with network protocols
-- Analyzing network traffic
-- Using Scapy for cybersecurity tasks
-- Building practical security tools
-
----
-
-## Disclaimer
-
-This project is intended for educational and authorized testing purposes only.
+- Network packet analysis
+- Understanding TCP/IP model
+- Traffic monitoring
+- Scapy library usage
+- Cybersecurity fundamentals
 
 ---
 
-## Author
+## ⚠️ Disclaimer
 
-Mahmoud Dhaybi
+This tool is for educational and authorized testing purposes only.
+
+---
+
+## 👨‍💻 Author
+
 Cyber Security Internship Project

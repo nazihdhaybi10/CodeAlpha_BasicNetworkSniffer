@@ -91,4 +91,4 @@ This tool is for educational and authorized testing purposes only.
 
 ## 👨‍💻 Author
 
-Cyber Security Internship Project
+Nazih El Dhaybi 
